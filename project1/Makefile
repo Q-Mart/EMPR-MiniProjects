@@ -34,7 +34,7 @@ LDFLAGS+=-L$(CMSIS)/lib -lDriversLPC17xxgnu
 
 EXECNAME	= bin/project1
 
-OBJ		= main.o lights.o
+OBJ		= main.o lights.o delay.o
 
 all: 	project1
 	@echo "Build finished"
@@ -54,7 +54,7 @@ clean:
 # install software to board, remember to sync the file systems
 install:
 	@echo "Copying " $(EXECNAME) "to the MBED file system"
-	cp $(EXECNAME).bin /media/omd505/MBED &
+	cp $(EXECNAME).bin /media/$(USER)/MBED/ &
 	sync
 	@echo "Now press the reset button on all MBED file systems"
 

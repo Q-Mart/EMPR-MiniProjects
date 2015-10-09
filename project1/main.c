@@ -1,35 +1,37 @@
+#include "main.h"
 #include "lights.h"
+#include "delay.h"
 
-volatile unsigned long on = 0;
-
-void SysTick_Handler(){
-  on++;
+void init(){
+	lightsInit();
+	delayInit();
 }
-void Delay(unsigned long tick){
-  unsigned long systickcnt;
-  systickcnt = on;
-  while ((on - systickcnt) < tick);
+
+void stage_1(){
+	int i;
+	int x;
+
+	for(i = 0; i < 5; ++i){
+		for(x = 0; x < 4; ++x){
+			switchOnLight(x);
+			delay(1000);
+			clearLight(x);
+		}
+	}
+}
+
+void stage_2(){
+	int i;
+
+	for(i = 0; i < 16; ++i){
+		displayNum(i);
+		delay(1000);
+	}
+	clearAll();
 }
 
 void main(void) {
-  lightsInit();
-  SysTick_Config(SystemCoreClock/1000 - 1);
-  clearAll();
-  Delay(500);
-  displayNum(2);
-  Delay(500);
-  displayNum(9);
-  int buzz = 0;
-  for(;;)    {
-    if(buzz == 0){
-      clearAll();
-      switchOnAll();
-      buzz=1;
-    } else {
-      buzz = 0;
-      clearAll();
-      displayNum(9);
-    }
-    Delay(500);
-  }
+	init();
+	stage_2();
+	
 }
