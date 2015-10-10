@@ -7,8 +7,8 @@ void serialUSBInit(){
 
   //Transmission setup
   pinCfg.Funcnum = 1;
-	pinCfg.OpenDrain = 0;
-	pinCfg.Pinmode = 0;
+  pinCfg.OpenDrain = 0;
+  pinCfg.Pinmode = 0;
   pinCfg.Portnum = 0;
   pinCfg.Pinnum = 2;
   PINSEL_ConfigPin(&pinCfg);
