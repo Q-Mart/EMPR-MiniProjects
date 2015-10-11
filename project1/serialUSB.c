@@ -26,9 +26,11 @@ void serialUSBInit(){
 }
 
 int serialUSBRead(char *buffer, int buffer_length){
-  return(UART_Receive((LPC_UART_TypeDef *)LPC_UART0, (uint8_t *)buffer, buffer_length, NONE_BLOCKING));
+  return(UART_Receive((LPC_UART_TypeDef *)LPC_UART0,
+		      (uint8_t *)buffer, buffer_length, NONE_BLOCKING));
 }
 
 int serialUSBWrite(char *buffer, int buffer_length){
-  return(UART_Send((LPC_UART_TypeDef *)LPC_UART0, (uint8_t *)buffer, buffer_length, BLOCKING)); 
+  return(UART_Send((LPC_UART_TypeDef *)LPC_UART0,
+		   (uint8_t *)buffer, buffer_length, BLOCKING)); 
 }
