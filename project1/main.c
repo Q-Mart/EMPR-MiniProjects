@@ -25,7 +25,7 @@ void stage_1(){
 void stage_2(){
   int i;
 
-  for(i = 0; i < 46; ++i){
+  for(i = 0; i < 16; ++i){
     displayNum(i);
     delay(1000);
   }
@@ -33,25 +33,25 @@ void stage_2(){
 }
 
 void stage_4(){
-  serialUSBWrite("Hello World!\n\r", 16);
+  serialUSBWrite("Hello World!\n\r");
 }
 
 void main(void) {
   init();
 
-  serialUSBWrite("Commencing Stage 1\n\r", 20);
+  serialUSBWrite("Commencing Stage 1\n\r");
   stage_1();
-  serialUSBWrite("Stage 1 complete\n\r", 20);
+  serialUSBWrite("Stage 1 complete\n\r");
 
   delay(500);
 
-  serialUSBWrite("Commencing Stage 2\n\r", 20);
+  serialUSBWrite("Commencing Stage 2\n\r");
   stage_2();
-  serialUSBWrite("Stage 2 complete\n\r", 20);
+  serialUSBWrite("Stage 2 complete\n\r");
 
   delay(500);
 
-  serialUSBWrite("Commencing Stage 4\n\r", 20);
+  serialUSBWrite("Commencing Stage 4\n\r");
   stage_4();
-  serialUSBWrite("Stage 4 complete\n\r", 20);
+  serialUSBWrite("Stage 4 complete\n\r");
 }
