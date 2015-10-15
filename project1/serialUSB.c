@@ -31,6 +31,10 @@ int serialUSBRead(char *buffer, int buffer_length){
 }
 
 int serialUSBWrite(char *buffer){
+  int string_len;
+
+  string_len = strlen(buffer);
+
   return(UART_Send((LPC_UART_TypeDef *)LPC_UART0,
-		   (uint8_t *)buffer, strlen(*buffer), BLOCKING)); 
+		   (uint8_t *)buffer, string_len, BLOCKING)); 
 }
