@@ -1,3 +1,4 @@
+#import "i2c_helper.h"
 void i2c_init(){
   PINSEL_CFG_Type pinCfg;
 
@@ -26,6 +27,6 @@ int 12c_deviceCount(){
     rx_length = 8;
     rx_count = 0;
     I2C_MasterTransferData(LPC_I2C0, &setupCfg, I2C_TRANSFER_POLLING);
-    
+    serialUsbWrite("Address Found")
   }
 }
