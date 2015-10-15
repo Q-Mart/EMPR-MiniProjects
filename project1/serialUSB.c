@@ -30,7 +30,7 @@ int serialUSBRead(char *buffer, int buffer_length){
 		      (uint8_t *)buffer, buffer_length, NONE_BLOCKING));
 }
 
-int serialUSBWrite(char *buffer, int buffer_length){
+int serialUSBWrite(char *buffer){
   return(UART_Send((LPC_UART_TypeDef *)LPC_UART0,
-		   (uint8_t *)buffer, buffer_length, BLOCKING)); 
+		   (uint8_t *)buffer, strlen(*buffer), BLOCKING)); 
 }
