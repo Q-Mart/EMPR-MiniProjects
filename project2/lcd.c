@@ -21,7 +21,7 @@ void lcd_Init(){
 int lcd_IsReady(){
   uint8_t recBuf = 0x80;
   I2C_M_SETUP_Type readCfg;
-  readCfg.sl_addr7bit = addr;
+  readCfg.sl_addr7bit = 59;
   readCfg.tx_data = NULL;
   readCfg.tx_length = 0;
   readCfg.rx_data = &recBuf;
@@ -37,5 +37,5 @@ int lcd_IsReady(){
 }
 
 void lcd_PrintChar(char c, int loc){
-  while(!lcd_IsReady())
+  /* while(!lcd_IsReady()) */
 }

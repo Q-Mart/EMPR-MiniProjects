@@ -34,7 +34,7 @@ LDFLAGS+=-L$(CMSIS)/lib -lDriversLPC17xxgnu
 
 EXECNAME	= bin/project2
 
-OBJ		= main.o i2c_helper.o serialUSB.o delay.o
+OBJ		= main.o i2c_helper.o serialUSB.o delay.o lcd.o
 
 all: 	project2
 	@echo "Build finished"
