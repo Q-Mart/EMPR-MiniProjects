@@ -37,5 +37,11 @@ int lcd_IsReady(){
 }
 
 void lcd_PrintChar(char c, int loc){
-  /* while(!lcd_IsReady()) */
+  int code = (int) c; //Get the ASCI code
+  int lcdCode; //The character code for set R on the lcd screen.
+  if ((code >= 97 && code <= 122) || (code >= 65 && code <= 218) || (code >= 48 && code <= 57) ){
+    lcdCode = code + 128;
+  } else {
+    lcdCode = 35;
+  }
 }
