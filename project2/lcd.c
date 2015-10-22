@@ -1,13 +1,12 @@
 #include "lcd.h"
 
 void lcd_Init(){
-  int addr = 59;
-  uint8_t buffer[] = {0x00, 0x34, 0x0c, 0x06,
+  uint8_t buffer[] = {SEND_COMMAND, 0x34, 0x0c, 0x06,
 		      0x35, 0x04, 0x10, 0x42,
-		      0x9f, 0x34, 0x02, 0x00,
+		      0x9f, 0x34, 0x02, SEND_COMMAND,
 		      0x01};
   I2C_M_SETUP_Type sendCfg;
-  sendCfg.sl_addr7bit = addr;
+  sendCfg.sl_addr7bit = ADDR;
   sendCfg.tx_data = buffer;
   sendCfg.tx_length = 13;
   sendCfg.rx_data = NULL;
@@ -19,9 +18,9 @@ void lcd_Init(){
 }
 
 int lcd_IsReady(){
-  uint8_t recBuf = 0x80;
+  uint8_t recBuf = SELECT_DDRAM;
   I2C_M_SETUP_Type readCfg;
-  readCfg.sl_addr7bit = 59;
+  readCfg.sl_addr7bit = ADDR;
   readCfg.tx_data = NULL;
   readCfg.tx_length = 0;
   readCfg.rx_data = &recBuf;
@@ -29,11 +28,26 @@ int lcd_IsReady(){
   I2C_MasterTransferData((LPC_I2C_TypeDef*)LPC_I2C1
 			 , &readCfg
 			 , I2C_TRANSFER_POLLING);
-  if((0x80 & recBuf) > 0){
+  if((SELECT_DDRAM & recBuf) > 0){
     return 0;
   } else {
     return 1;
   }
+}
+
+void lcd_SendData(uint8_t buffer, int buffer_length){
+  //Sends I2C data to the LCD
+  
+  I2C_M_SETUP_Type sendCfg;
+  sendCfg.sl_addr7bit = ADDR;
+  sendCfg.tx_data = buffer;
+  sendCfg.tx_length = buffer_length;
+  sendCfg.rx_data = NULL;
+  sendCfg.rx_length = 0;
+  sendCfg.retransmissions_max = 3;
+  I2C_MasterTransferData((LPC_I2C_TypeDef*)LPC_I2C1
+      , &sendCfg
+      , I2C_TRANSFER_POLLING);
 }
 
 void lcd_PrintChar(char c, int loc){
@@ -44,4 +58,22 @@ void lcd_PrintChar(char c, int loc){
   } else {
     lcdCode = 35;
   }
+}
+
+void lcd_ClearScreen(){
+  int address;
+  uint8_t buffer[] = {SEND_COMMAND, 0x08};
+  int buffer_length = 3;
+  lcd_SendData(buffer, buffer_length);
+
+  for(address=0; address<32; address+=2){
+   buffer[address] = (SELECT_DDRAM | address);
+   buffer[address + 1] = CLEAR_CHARACTER;
+  }
+  
+  buffer_length = 64;
+  lcd_SendData(buffer, buffer_length);
+
+  buffer[] = {SEND_COMMAND, 0x0c};
+  lcd_SendData(buffer, buffer_length);
 }
