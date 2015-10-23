@@ -19,7 +19,7 @@ void main(){
   serialUSBWrite("Done waiting\n\r");
   
 
-  uint8_t bufferLd[] = {0x00, 0x81};
+  uint8_t bufferLd[] = {0x00, 0x80};
 
   I2C_M_SETUP_Type sendCfg;
   int addr = 59;
@@ -36,7 +36,7 @@ void main(){
     serialUSBWrite("Write to I2C bus succeeded! Zoot up\n\r");
   }
 
-  uint8_t bufferYay[] = {0x40, 0x64, 0x64};
+  uint8_t bufferYay[] = {0x40, 0xA0, 0x64};
 
   sendCfg.sl_addr7bit = addr;
   sendCfg.tx_data = bufferYay;
@@ -50,7 +50,13 @@ void main(){
 
     serialUSBWrite("Write to I2C bus succeeded! Zoot up\n\r");
   }
+
+
+  lcd_PrintChar('a', 0);
+  lcd_PrintChar(' ', 1);
+  lcd_PrintString("Hello World!");
     
-  
+ lcd_ClearScreen();
+ lcd_PrintString("I'm back");
 
 }
