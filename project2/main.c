@@ -2,12 +2,14 @@
 #include "delay.h"
 #include "lcd.h"
 #include "key_pad.h"
+#include "calc.h"
 
 
 void main(){
   serialUSBInit();
   i2c_init();
   lcd_Init();
+  delayInit();
 
   //i2c_deviceCount();
   
@@ -51,8 +53,13 @@ void main(){
 
     serialUSBWrite("Write to I2C bus succeeded! Zoot up\n\r");
   }
+  
+
+
 
   key_pad_init();
+
+  calc_loop();
   while(1){
     int retVal = key_pad_poll(); 
     if( retVal < 16){

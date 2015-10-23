@@ -1,5 +1,6 @@
 #include "key_pad.h"
 #include "serialUSB.h"
+#include "delay.h"
 
 void key_pad_init(){
   i2c_init();
@@ -47,6 +48,7 @@ int key_pad_poll(){
     rxbuff = (~(rxbuff & 0x0F)) & 0x0F;
     if(rxbuff != 0){
       rxbuff = 3 - find_pow_of_2(rxbuff);
+      delay(200);
       return key_pad_keys[rxbuff][i];
     }
   }
