@@ -113,9 +113,11 @@ void lcd_PrintString(char *str){
     lcd_PrintChar(str[i], i);
   }
 
-  /* This line is only needed for two-line mode
+  /* This is only needed for two-line mode
    * It increments the current character (i) so that the newline character is not printed*/
-  ++i;
+  if (str[i] == '\n'){
+    ++i;
+  }
 
   /* Print the second line 
    * Works through every address of the second line and prints the current character*/
