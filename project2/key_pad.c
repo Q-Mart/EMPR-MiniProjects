@@ -12,9 +12,7 @@ void key_pad_init(){
   setupCfg.tx_length = 1;
   setupCfg.rx_data = NULL;
   setupCfg.rx_length = 0;
-  if(I2C_MasterTransferData((LPC_I2C_TypeDef*) LPC_I2C1, &setupCfg, I2C_TRANSFER_POLLING) == SUCCESS){
-    serialUSBWrite("key pad init successful");
-  }
+  I2C_MasterTransferData((LPC_I2C_TypeDef*) LPC_I2C1, &setupCfg, I2C_TRANSFER_POLLING);
 }
 
 int find_pow_of_2(int a){
