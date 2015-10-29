@@ -26,7 +26,7 @@ int calculateExpression(int acc){
     case 11://Minus
       return acc - calculateExpression(0);
     case 12://Divide
-      return calculateExpression(acc * calculateExpression(0));
+      return calculateExpression(acc / calculateExpression(0));
     case 14://Multiply
       return calculateExpression(acc * calculateExpression(0));
     default:
@@ -54,6 +54,7 @@ void calc_loop(){
       sprintf(str, "\n\r%d\n\r", res);
       serialUSBWrite(str);
       input_marker = 0;
+      symbol_point = 0;
       break;
     case 16:
       break;
