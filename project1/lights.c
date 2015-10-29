@@ -4,7 +4,7 @@ void lightsInit(){
   GPIO_SetDir(PORT, ALL_LIGHTS, 1); //Set all LEDs as output
 }
 void clearAll(){
-  GPIO_ClearValue(PORT, ALL_LIGHTS);
+  GPIO_ClearValue(PORT, ALL_LIGHTS); //Clears all the GPIO_Lights
 }
 void clearLight(unsigned int lightNumber){
   switch(lightNumber % 4){

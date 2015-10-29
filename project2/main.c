@@ -1,12 +1,15 @@
 #include "main.h"
 #include "delay.h"
 #include "lcd.h"
+#include "key_pad.h"
+#include "calc.h"
 
 
 void main(){
   serialUSBInit();
   i2c_init();
   lcd_Init();
+  delayInit();
 
   //i2c_deviceCount();
   
@@ -52,11 +55,52 @@ void main(){
   }
 
 
-  lcd_PrintChar('a', 0);
-  lcd_PrintChar(' ', 1);
-  lcd_PrintString("Hello World!");
-    
- lcd_ClearScreen();
- lcd_PrintString("I'm back");
+
+  key_pad_init();
+
+  calc_loop();
+  while(1){
+    int retVal = key_pad_poll(); 
+    if( retVal < 16){
+      switch(retVal){
+      case 0:
+	serialUSBWrite("0\n\r");
+	break;
+      case 1:
+	serialUSBWrite("1\n\r");
+	break;
+      case 2:
+	serialUSBWrite("2\n\r");
+	break;
+      case 3:
+	serialUSBWrite("3\n\r");
+	break;
+      case 4:
+	serialUSBWrite("4\n\r");
+	break;
+      case 5:
+	serialUSBWrite("5\n\r");
+	break;
+      case 6:
+	serialUSBWrite("6\n\r");
+	break;
+      case 7:
+	serialUSBWrite("7\n\r");
+	break;
+      case 8:
+	serialUSBWrite("8\n\r");
+	break;
+      case 9:
+	serialUSBWrite("9\n\r");
+	break;
+      default:
+	serialUSBWrite("ELSE\n\r");
+	break;
+
+	}
+    }
+  }
+  
+  serialUSBWrite("END!\n\r");
 
 }
