@@ -32,9 +32,9 @@ LDFLAGS=$(CMSISFL) -static -mcpu=cortex-m3 -mthumb -mthumb-interwork \
 
 LDFLAGS+=-L$(CMSIS)/lib -lDriversLPC17xxgnu
 
-EXECNAME	= bin/project2
+EXECNAME	= bin/project3
 
-OBJ		= main.o serialUSB.o
+OBJ		= main.o serialUSB.o wave.o
 
 all: 	project2
 	@echo "Build finished"
