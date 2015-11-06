@@ -1,9 +1,11 @@
 #include "main.h"
 #include "stdio.h"
+#include "delay.h"
 
 int main(){
   serialUSBInit();
   wave_Init();
+  delayInit();
 
   /* PINSEL_CFG_Type pinCfg; */
 
@@ -27,8 +29,9 @@ int main(){
   /*   serialUSBWrite(str); */
   /* } */
 
-  while (1){
-    wave_Sin(512);
-  }
+  wave_Sin(2, 3);
+
   serialUSBWrite("WAAAAAAAVE\r\n");
+
+  return 1;
 }
