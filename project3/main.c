@@ -2,29 +2,30 @@
 #include "stdio.h"
 #include "delay.h"
 #include "adc.h"
+#include "wave.h"
+#include "lpc17xx_dac.h"
 
 int main(){
   serialUSBInit();
-  serialUSBWrite("Starting...");
+  serialUSBWrite("Starting...\n\r");
+  char str[15];
+  int val;
+  ADC_InitChannel(1);
   PINSEL_CFG_Type pinCfg;
-  pinCfg.Funcnum = 1;
+
+  pinCfg.Funcnum = 2;
   pinCfg.OpenDrain = 0;
   pinCfg.Pinmode = 0;
   pinCfg.Portnum = 0;
-  pinCfg.Pinnum = 24;
+  pinCfg.Pinnum = 26;
   PINSEL_ConfigPin(&pinCfg);
-
-  ADC_Init(LPC_ADC, 200000);
-
-  ADC_IntConfig(LPC_ADC, 1, DISABLE);
-  ADC_ChannelCmd(LPC_ADC, 1, ENABLE);
-  char str[15];
-  //int val;
+  DAC_Init(LPC_DAC);
   while(1){
-    ADC_StartCmd(LPC_ADC, ADC_START_NOW);
-    while(!(ADC_ChannelGetStatus(LPC_ADC, 1, ADC_DATA_DONE)));
-    int val = ADC_ChannelGetData(LPC_ADC, 1);
-    sprintf(str, "%d\n\r", val);
-    serialUSBWrite(str);
+    val = ADC_GetChannelData(1)/4;
+    /*sprintf(str, "%d\n\r", val);
+      serialUSBWrite(str);*/
+    DAC_UpdateValue(LPC_DAC, val);
+    /*sprintf(str, "%d\n\r", val);
+      serialUSBWrite(str);*/
   }
 }
