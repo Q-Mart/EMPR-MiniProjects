@@ -3,24 +3,95 @@
 #include "delay.h"
 #include "adc.h"
 #include "dac.h"
-#include "math.hi"
+#include "math.h"
+#include "lpc17xx_pwm.h"
+#include "lpc17xx_rit.h"
+#include "lpc17xx_nvic.h"
+
+#define PI 3.14159265
+
+int thing;
 
 void wave_Sin(int freq, float amp){
   int i;
-  int seconds = 0;
-  int period = 1/freq;
+  float seconds = 0.0f;
+  float period = 1.0f/(float)freq;
 
-  while(second <= 5){
+  while(seconds <= 5){
     for(i=0; i<=360; ++i){
       dac_UpdateData((amp * (1023/3.3))/2* sin(i * PI/180.0f) + 511);
       delay(1000/(360 * freq));
     }
-    second += period;
+    seconds += period;
   }
+}
+
+void RIT_IRQHandler(){
+  thing = (thing + 1)  % 5000;
+  PWM_MatchUpdate(LPC_PWM1, 6, thing, PWM_MATCH_UPDATE_NOW);
+  RIT_GetIntStatus(LPC_RIT);
 }
 
 int main(){
   serialUSBInit();
+  thing = 1;
+  PINSEL_CFG_Type pinCfg;
+  PWM_TIMERCFG_Type PWMCfgDat;
+  PWM_MATCHCFG_Type PWMMatchCfgDat;
+  PWMCfgDat.PrescaleOption = PWM_TIMER_PRESCALE_TICKVAL;
+  PWMCfgDat.PrescaleValue = 1;
+  PWM_Init(LPC_PWM1, PWM_MODE_TIMER, (void*) &PWMCfgDat);
+
+  pinCfg.Funcnum = 1;
+  pinCfg.OpenDrain = 0;
+  pinCfg.Pinmode = 0;
+  pinCfg.Portnum = 2;
+  pinCfg.Pinnum = 5;
+  PINSEL_ConfigPin(&pinCfg);
+
+  PWM_MatchUpdate(LPC_PWM1, 0, 5000, PWM_MATCH_UPDATE_NOW);
+  PWMMatchCfgDat.IntOnMatch = DISABLE;
+  PWMMatchCfgDat.MatchChannel = 0;
+  PWMMatchCfgDat.ResetOnMatch = ENABLE;
+  PWMMatchCfgDat.StopOnMatch = DISABLE;
+  PWM_ConfigMatch(LPC_PWM1, &PWMMatchCfgDat);
+
+  PWM_ChannelConfig(LPC_PWM1, 6, PWM_CHANNEL_SINGLE_EDGE);
+
+  PWM_MatchUpdate(LPC_PWM1, 6, 2, PWM_MATCH_UPDATE_NOW);
+  PWMMatchCfgDat.IntOnMatch = DISABLE;
+  PWMMatchCfgDat.MatchChannel = 6;
+  PWMMatchCfgDat.ResetOnMatch = DISABLE;
+  PWMMatchCfgDat.StopOnMatch = DISABLE;
+  PWM_ConfigMatch(LPC_PWM1, &PWMMatchCfgDat);
+  PWM_ChannelCmd(LPC_PWM1, 6, ENABLE);
+  
+
+
+  PWM_ResetCounter(LPC_PWM1);
+  PWM_CounterCmd(LPC_PWM1, ENABLE);
+  PWM_Cmd(LPC_PWM1, ENABLE);
+  NVIC_EnableIRQ(RIT_IRQn);
+  RIT_Init(LPC_RIT);
+  RIT_TimerConfig(LPC_RIT, 1);
+  RIT_Cmd(LPC_RIT, ENABLE);
+  //RIT_GetIntStatus(LPC_RIT);
+  //char str[15];
+  //int i = 0;
+  while(1){
+    //sprintf(str, "%d -- %d\n\r", i, thing);
+    //serialUSBWrite(str);
+    //i += 1;
+    //PWM_MatchUpdate(LPC_PWM1, 6, thing, PWM_MATCH_UPDATE_NOW);
+    
+  }
+  
+
+  
+
+  /*
+  serialUSBInit();
+  delayInit();
   serialUSBWrite("Starting...\r\n");
   char str[15];
   int val;
@@ -30,8 +101,11 @@ int main(){
 
   //Stage 1
   serialUSBWrite("Beggining Stage 1\r\n");
+  float inputVal;
   for(i=0;i<5;++i){
-    ADC_GetChannelVoltage(1);
+    inputVal = ADC_GetChannelVoltage(1);
+    sprintf(str, "%f\n\r", inputVal);
+    serialUSBWrite(str);
     delay(1000);
   }
   serialUSBWrite("Stage 1 complete\r\n");
@@ -49,10 +123,10 @@ int main(){
 
   serialUSBWrite("Stage 2 complete\r\n");
 
-  serialUSBWrite("Beginning Stage 2\r\n");
-  for(i=0;i<5;++i){
+  serialUSBWrite("Beginning Stage 3\r\n");
+  while(1){
     val = ADC_GetChannelData(1)/4;
     DAC_UpdateValue(LPC_DAC, val);
-    delay(1000);
-  }
+  
+    }*/
 }

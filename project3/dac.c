@@ -1,7 +1,6 @@
-#include "wave.h"
+#include "dac.h"
 #include "math.h"
-#define PI 3.14159265
-void dac(){
+void dac_Init(){
   PINSEL_CFG_Type pinCfg;
 
   pinCfg.Funcnum = 2;
