@@ -4,7 +4,7 @@
 #include "adc.h"
 #include "dac.h"
 #include "math.h"
-#include "lpc17xx_pwm.h"
+#include "pwm.h"
 #include "lpc17xx_rit.h"
 #include "lpc17xx_nvic.h"
 
@@ -35,38 +35,8 @@ void RIT_IRQHandler(){
 int main(){
   serialUSBInit();
   thing = 1;
-  PINSEL_CFG_Type pinCfg;
-  PWM_TIMERCFG_Type PWMCfgDat;
-  PWM_MATCHCFG_Type PWMMatchCfgDat;
-  PWMCfgDat.PrescaleOption = PWM_TIMER_PRESCALE_TICKVAL;
-  PWMCfgDat.PrescaleValue = 1;
-  PWM_Init(LPC_PWM1, PWM_MODE_TIMER, (void*) &PWMCfgDat);
 
-  pinCfg.Funcnum = 1;
-  pinCfg.OpenDrain = 0;
-  pinCfg.Pinmode = 0;
-  pinCfg.Portnum = 2;
-  pinCfg.Pinnum = 5;
-  PINSEL_ConfigPin(&pinCfg);
-
-  PWM_MatchUpdate(LPC_PWM1, 0, 5000, PWM_MATCH_UPDATE_NOW);
-  PWMMatchCfgDat.IntOnMatch = DISABLE;
-  PWMMatchCfgDat.MatchChannel = 0;
-  PWMMatchCfgDat.ResetOnMatch = ENABLE;
-  PWMMatchCfgDat.StopOnMatch = DISABLE;
-  PWM_ConfigMatch(LPC_PWM1, &PWMMatchCfgDat);
-
-  PWM_ChannelConfig(LPC_PWM1, 6, PWM_CHANNEL_SINGLE_EDGE);
-
-  PWM_MatchUpdate(LPC_PWM1, 6, 2, PWM_MATCH_UPDATE_NOW);
-  PWMMatchCfgDat.IntOnMatch = DISABLE;
-  PWMMatchCfgDat.MatchChannel = 6;
-  PWMMatchCfgDat.ResetOnMatch = DISABLE;
-  PWMMatchCfgDat.StopOnMatch = DISABLE;
-  PWM_ConfigMatch(LPC_PWM1, &PWMMatchCfgDat);
-  PWM_ChannelCmd(LPC_PWM1, 6, ENABLE);
-  
-
+  pwmInit(5000);
 
   PWM_ResetCounter(LPC_PWM1);
   PWM_CounterCmd(LPC_PWM1, ENABLE);
