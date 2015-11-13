@@ -36,11 +36,10 @@ int main(){
   serialUSBInit();
   thing = 1;
 
-  pwmInit(5000);
+  pwmInit(5000, 6);
 
-  PWM_ResetCounter(LPC_PWM1);
-  PWM_CounterCmd(LPC_PWM1, ENABLE);
-  PWM_Cmd(LPC_PWM1, ENABLE);
+  pwmSetValue(6, 0.5, 5000);
+
   NVIC_EnableIRQ(RIT_IRQn);
   RIT_Init(LPC_RIT);
   RIT_TimerConfig(LPC_RIT, 1);
