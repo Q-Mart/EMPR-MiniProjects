@@ -1,5 +1,4 @@
 #include "adc.h"
-#include "serialUSB.h"
 void ADC_InitChannel(int i){
   PINSEL_CFG_Type pinCfg;
     pinCfg.Funcnum = 1;
@@ -11,7 +10,6 @@ void ADC_InitChannel(int i){
   ADC_Init(LPC_ADC, 200000);
     ADC_IntConfig(LPC_ADC, i, DISABLE);
     ADC_ChannelCmd(LPC_ADC, i, ENABLE);
-  serialUSBWrite("INIT DONE");
 }
 
 float ADC_GetChannelVoltage(int chan){

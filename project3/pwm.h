@@ -3,3 +3,4 @@
 
 void pwmInit(int base, int channel);
 void pwmSetValue(int channel, float val, int base);
+void pwmDisable();

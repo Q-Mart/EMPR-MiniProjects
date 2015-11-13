@@ -50,3 +50,8 @@ void pwmSetValue(int channel, float val, int base){
 
   PWM_MatchUpdate(LPC_PWM1, channel, val*base, PWM_MATCH_UPDATE_NOW);
 }
+
+void pwmDisable(){
+  PWM_CounterCmd(LPC_PWM1, DISABLE);
+  PWM_Cmd(LPC_PWM1, DISABLE);
+}

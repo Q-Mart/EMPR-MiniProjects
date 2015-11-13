@@ -1,16 +1,8 @@
 #include "main.h"
-#include "stdio.h"
-#include "delay.h"
-#include "adc.h"
-#include "dac.h"
-#include "math.h"
-#include "pwm.h"
-#include "lpc17xx_rit.h"
-#include "lpc17xx_nvic.h"
 
 #define PI 3.14159265
 
-int thing;
+float pwm_Width;
 
 void wave_Sin(int freq, float amp){
   int i;
@@ -26,44 +18,30 @@ void wave_Sin(int freq, float amp){
   }
 }
 
-void RIT_IRQHandler(){
-  thing = (thing + 1)  % 5000;
-  PWM_MatchUpdate(LPC_PWM1, 6, thing, PWM_MATCH_UPDATE_NOW);
-  RIT_GetIntStatus(LPC_RIT);
+void rit_IRQHandler(){
+  if (pwm_Width > 1.0){
+    pwm_Width = 0.0;
+  }
+  else{
+    pwm_Width = pwm_Width + 0.0002f;
+  }
+  pwmSetValue(6, pwm_Width, 5000);
 }
 
 int main(){
   serialUSBInit();
-  thing = 1;
-
+  delayInit();
   pwmInit(5000, 6);
+  rit_Init();
+
+  pwmDisable();
+
+  pwm_Width = 0.0f;
 
   pwmSetValue(6, 0.5, 5000);
 
-  NVIC_EnableIRQ(RIT_IRQn);
-  RIT_Init(LPC_RIT);
-  RIT_TimerConfig(LPC_RIT, 1);
-  RIT_Cmd(LPC_RIT, ENABLE);
-  //RIT_GetIntStatus(LPC_RIT);
-  //char str[15];
-  //int i = 0;
-  while(1){
-    //sprintf(str, "%d -- %d\n\r", i, thing);
-    //serialUSBWrite(str);
-    //i += 1;
-    //PWM_MatchUpdate(LPC_PWM1, 6, thing, PWM_MATCH_UPDATE_NOW);
-    
-  }
-  
-
-  
-
-  /*
-  serialUSBInit();
-  delayInit();
   serialUSBWrite("Starting...\r\n");
   char str[15];
-  int val;
   ADC_InitChannel(1);
   dac_Init();
   int i;
@@ -77,6 +55,7 @@ int main(){
     serialUSBWrite(str);
     delay(1000);
   }
+
   serialUSBWrite("Stage 1 complete\r\n");
 
   //Stage 2
@@ -92,10 +71,21 @@ int main(){
 
   serialUSBWrite("Stage 2 complete\r\n");
 
+  //Stage 3
   serialUSBWrite("Beginning Stage 3\r\n");
+
+  int val;
+
   while(1){
     val = ADC_GetChannelData(1)/4;
     DAC_UpdateValue(LPC_DAC, val);
-  
-    }*/
+  }
+
+
+  //Stage 4
+  serialUSBWrite("Beginning Stage 4\r\n");
+
+  pwm_Width = 0.0f;
+
+  rit_Enable();
 }
