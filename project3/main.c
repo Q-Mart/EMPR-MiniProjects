@@ -4,17 +4,16 @@
 
 float pwm_Width;
 
-void wave_Sin(int freq, float amp){
+void wave_Sin(int del, float amp){
   int i;
   float seconds = 0.0f;
-  float period = 1.0f/(float)freq;
 
-  while(seconds <= 5){
-    for(i=0; i<=360; ++i){
+  while(seconds <= 8){
+    for(i=0; i<=360; i+=4){
       dac_UpdateData((amp * (1023/3.3))/2* sin(i * PI/180.0f) + 511);
-      delay(1000/(360 * freq));
+      delay(del);
     }
-    seconds += period;
+    seconds += (float)del * 0.001 * 90;
   }
 }
 
@@ -60,14 +59,14 @@ int main(){
 
   //Stage 2
   serialUSBWrite("Beginning Stage 2\r\n");
-  serialUSBWrite("Wave 1: Amplitude 1V, Frequency 2Hz\r\n");
-  wave_Sin(2, 1.0);
+  serialUSBWrite("Wave 1: Amplitude 1V, Frequency 11Hz\r\n");
+  wave_Sin(1, 1.0);
 
-  serialUSBWrite("Wave 2: Amplitude 3V, Frequency 10Hz\r\n");
-  wave_Sin(10, 3.0);
+  serialUSBWrite("Wave 2: Amplitude 3V, Frequency 5.5Hz\r\n");
+  wave_Sin(2, 3.0);
 
-  serialUSBWrite("Wave 3: Amplitude 1.5V Frequency 20Hz\r\n");
-  wave_Sin(20, 1.5);
+  serialUSBWrite("Wave 3: Amplitude 1.5V Frequency 2.75Hz\r\n");
+  wave_Sin(4, 1.5);
 
   serialUSBWrite("Stage 2 complete\r\n");
 
