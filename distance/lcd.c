@@ -69,7 +69,7 @@ void lcd_PrintChar(char c, int loc){
   if ((code >= 97 && code <= 122)){
     //This handles lower case character
     lcdCode = code | SELECT_CGRAM;
-  }else if ((code >= 65 && code <= 218) || (code >= 32 && code <= 47) || (code >= 48 && code <=57)){
+  }else if ((code >= 65 && code <= 218) || (code >= 32 && code <= 47) || (code >= 48 && code <=57) || (code >= 58 && code <= 96)){
     //This handles punctuation and capital letters and numbers
     lcdCode = (code + CHARACTER_SHIFT);
   } else {
@@ -95,10 +95,7 @@ void lcd_PrintString(char *str){
 
   //The first thing to do is to clear the screen
   lcd_ClearScreen();
-
-  //Now wait for the screen to be clear
-  while(lcd_IsReady());
-
+  while(!lcd_IsReady()); 
   //Error handling: Cuts string to max length
   if (len > 32){
     len = 32;

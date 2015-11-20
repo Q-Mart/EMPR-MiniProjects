@@ -34,7 +34,7 @@ LDFLAGS+=-L$(CMSIS)/lib -lDriversLPC17xxgnu
 
 EXECNAME	= bin/distance
 
-OBJ		= main.o delay.o serialUSB.o adc.o key_pad.o i2c_helper.o lcd.o ir_sensor.o
+OBJ		= main.o serialUSB.o delay.o adc.o key_pad.o i2c_helper.o ir_sensor.o lcd.o
 
 all: 	distance
 	@echo "Build finished"

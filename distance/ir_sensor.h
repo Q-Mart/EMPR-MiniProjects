@@ -1,12 +1,9 @@
-#include "serialUSB.h"
-#include "lpc17xx_adc.h"
 #include "delay.h"
 #include "adc.h"
-#include "keypad.h"
-#include "lcd.c"
-
+#include "key_pad.h"
+ 
 #define HASH 15
 
 void ir_sensorInit();
 void ir_sensorCalibrate();
-int ir_sensorGetDistance();
+float ir_sensorGetDistance();

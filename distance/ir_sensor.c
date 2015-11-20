@@ -1,16 +1,17 @@
 #include "ir_sensor.h"
+#include "serialUSB.h"
 
-float m;
-float c;
+static float m;
+static float c;
 
 void ir_sensorInit(){
   delayInit();
   ADC_InitChannel(1);
   i2c_init();
   key_pad_init();
-  lcd_Init();
   serialUSBInit();
-  lcd_ClearScreen();
+  m = 0.0f;
+  c = 0.0f;
 }
 
 void ir_sensorCalibrate(){
@@ -25,18 +26,21 @@ void ir_sensorCalibrate(){
 
   int i;
   float samples[2];
-  for(i=0;i<2;++i){
+  for(i=0;i<2;i++){
     /* wait for the hash key to be pressed */
     while(key_pad_poll() != HASH);
     samples[i] = ADC_GetChannelVoltage(1);
   }
   
-  m = (samples[0] - samples[1])/((1.0f/10.0f) - (1.0f/20.0f));
+  m = (samples[0] - samples[1]) / ((1.0f/10.0f) - (1.0f/20.0f));
   c = samples[1] - (m/20.0f);
+  char str[16];
+  sprintf(str, "%.3f -- %.3f\n", m, c);
+  serialUSBWrite(str);
 }
 
-int ir_sensorGetDistance(){
+float ir_sensorGetDistance(){
   /* returns the distance in cm */
-  
-  return m/(ADC_GetChannelVoltage() - c);
+  float val = ADC_GetChannelVoltage(1);
+  return m/(val - c);
 }
