@@ -96,6 +96,9 @@ void lcd_PrintString(char *str){
   //The first thing to do is to clear the screen
   lcd_ClearScreen();
 
+  //Now wait for the screen to be clear
+  while(lcd_IsReady());
+
   //Error handling: Cuts string to max length
   if (len > 32){
     len = 32;
