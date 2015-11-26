@@ -9,6 +9,9 @@ int main(){
   lcd_Init();
   lcd_ClearScreen();
   //Start in Calibration mode
+  lcd_PrintString("Calibration:\nPress # at 20cm");
+  delay(500);
+  lcd_PrintString("Calibration: Then Press # at 10cm");
   ir_sensorCalibrate();
   //Enter main loop
   while(1){
