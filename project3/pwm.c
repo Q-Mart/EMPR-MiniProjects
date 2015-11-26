@@ -48,7 +48,7 @@ void pwmSetValue(int channel, float val, int base){
    * @param base: your channel 0 base time
    */
 
-  PWM_MatchUpdate(LPC_PWM1, channel, val*base, PWM_MATCH_UPDATE_NOW);
+  PWM_MatchUpdate(LPC_PWM1, channel, (int)(val*base), PWM_MATCH_UPDATE_NOW);
 }
 
 void pwmDisable(){

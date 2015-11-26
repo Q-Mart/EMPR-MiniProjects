@@ -31,9 +31,8 @@ int main(){
   serialUSBInit();
   delayInit();
   pwmInit(5000, 6);
-  rit_Init();
 
-  pwmDisable();
+  //pwmDisable();
 
   pwm_Width = 0.0f;
 
@@ -44,7 +43,7 @@ int main(){
   ADC_InitChannel(1);
   dac_Init();
   int i;
-
+  
   //Stage 1
   serialUSBWrite("Beggining Stage 1\r\n");
   float inputVal;
@@ -80,11 +79,12 @@ int main(){
     DAC_UpdateValue(LPC_DAC, val);
   }
 
-
+  
   //Stage 4
   serialUSBWrite("Beginning Stage 4\r\n");
 
   pwm_Width = 0.0f;
-
+  rit_Init();
   rit_Enable();
+  while(1);
 }
